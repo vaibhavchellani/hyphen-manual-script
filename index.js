@@ -4,9 +4,9 @@ var cron = require('node-cron')
 var ethers = require('ethers')
 const { default: axios } = require('axios')
 let LAST_PROCESSED_BLOCK_BY_CHAINID = {
-  137: 22840100,
-  1: 13856967,
-  43114: 8582052,
+  137: process.env.MATIC_START,
+  1: process.env.ETH_START,
+  43114: process.env.ETH_START,
 }
 
 const MaticProvider = new ethers.providers.JsonRpcProvider(
@@ -83,6 +83,6 @@ async function getCurrentBlock(chainID) {
   return currentBlock.number
 }
 
-cron.schedule('*/3 * * * *', () => {
+cron.schedule('*/30 * * * *', () => {
   main()
 })

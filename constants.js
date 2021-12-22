@@ -25,9 +25,9 @@ const HYPHEN_ID = {
 }
 
 const RPC_URL = {
-  137: 'https://little-bold-bush.matic.quiknode.pro/2b2c0d5ac8705ad40ba2fbbab49269f97ebb9b33/',
-  1: 'https://cold-dark-dew.quiknode.pro/9d8b1502b9e2ae1b3fbe2cbac8a670ee44708c34/',
-  43114: 'https://speedy-nodes-nyc.moralis.io/32a97bb2a32db2f4f81e80b2/avalanche/mainnet',
+  137: process.env.MATIC_RPC,
+  1: process.env.ETH_RPC,
+  43114: process.env.AVA_RPC,
 }
 
 const FM_ADDRESSES = {
