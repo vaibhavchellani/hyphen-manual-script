@@ -24,15 +24,16 @@ const PROVIDERS = {
   43114: AvaProvider,
 }
 
-function main() {
+async function main() {
   // fetch all hyphen processed txs by fundmovr on all chains where its deployed
   // return pending txs along with source-chain-id
   for (const chainID of constants.supportedChainIDs) {
-    fetchHyphenPendingTxs(chainID)
+    await fetchHyphenPendingTxs(chainID)
   }
 }
 
 async function fetchHyphenPendingTxs(chainID) {
+  console.log('******************** processing for chainID', chainID)
   const startBlock = LAST_PROCESSED_BLOCK_BY_CHAINID[chainID]
   const currentBlock = await getCurrentBlock(chainID)
   console.log('current block', currentBlock)
@@ -44,7 +45,7 @@ async function fetchHyphenPendingTxs(chainID) {
 
   console.log('confs done')
   const endBlock = currentBlock - constants.CONFIRMATIONS[chainID]
-  console.log(' end block', endBlock)
+  console.log('end block', endBlock)
 
   // if enough blocks have happend since last sync, lets sync all fund movr events
   const fmContract = new ethers.Contract(
@@ -52,12 +53,15 @@ async function fetchHyphenPendingTxs(chainID) {
     constants.FundMovrABI,
     PROVIDERS[chainID],
   )
+  console.log('vars', typeof startBlock, typeof endBlock)
 
   const logs = await fmContract.queryFilter(
     fmContract.filters.ExecutionCompleted,
-    startBlock,
-    endBlock,
+    parseInt(startBlock),
+    parseInt(endBlock),
   )
+
+  console.log('Logs found', 'count', logs.length)
 
   for (const log of logs) {
     if (log.args.bridgeID == constants.HYPHEN_ID[chainID]) {
@@ -68,6 +72,8 @@ async function fetchHyphenPendingTxs(chainID) {
       tryHyphen(chainID, log.transactionHash)
     }
   }
+
+  LAST_PROCESSED_BLOCK_BY_CHAINID[chainID] = endBlock
 }
 
 async function tryHyphen(chainID, sourceTxHash) {
@@ -83,6 +89,6 @@ async function getCurrentBlock(chainID) {
   return currentBlock.number
 }
 
-cron.schedule('*/30 * * * *', () => {
+cron.schedule('*/15 * * * *', () => {
   main()
 })
