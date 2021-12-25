@@ -1,15 +1,16 @@
 const ethers = require('ethers')
+
 const FundMovrABI = [
   'event ExecutionCompleted(uint256 middlewareID,uint256 bridgeID,uint256 inputAmount);',
 ]
-const POLLING_INTERVAL = 10
 const HYPHEN_PROCESS_TX_URL =
   'https://hyphen-api.biconomy.io/api/v1/insta-exit/execute'
 const WATCHER_API_BASE_URL = 'https://watcherapi.fund.movr.network/api/v1/'
+
 const CONFIRMATIONS = {
-  137: 800,
-  1: 150,
-  43114: 800,
+  137: 150,
+  1: 20,
+  43114: 150,
 }
 
 const NAME_TO_CHAINID = {
@@ -39,7 +40,6 @@ const FM_ADDRESSES = {
 const supportedChainIDs = [137, 1, 43114]
 module.exports = {
   FundMovrABI,
-  POLLING_INTERVAL,
   supportedChainIDs,
   HYPHEN_PROCESS_TX_URL,
   WATCHER_API_BASE_URL,
