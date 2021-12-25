@@ -108,6 +108,7 @@ async function getCurrentBlock(chainID) {
   const currentBlock = await PROVIDERS[chainID].getBlock('latest')
   return currentBlock.number
 }
+
 cron.schedule('*/5 * * * *', () => {
    main()
 })
