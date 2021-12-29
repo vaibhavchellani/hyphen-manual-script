@@ -158,6 +158,6 @@ async function getCurrentBlock(chainID) {
   return currentBlock.number
 }
 
-cron.schedule('*/1 * * * *', () => {
+cron.schedule('*/5 * * * *', () => {
   main()
 })
